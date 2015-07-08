@@ -74,7 +74,7 @@
                             <archive>
                                 <manifest>
                                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                    <mainClass>edu.gsu.cs.kgem.exec.Main</mainClass>
+                                    <mainClass>edu.gsu.cs.2snv.exec.Main</mainClass>
                                 </manifest>
                                 <manifestEntries>
                                     <author>Alex Artyomenko</author>
