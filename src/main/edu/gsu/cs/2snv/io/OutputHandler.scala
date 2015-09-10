@@ -41,7 +41,7 @@ object OutputHandler {
   def outputResult(out: PrintStream, gens: Iterable[Genotype], n: Int, clean: (String => String) = s => s) = {
     val gg = gens
     var i = 0
-    val haplSeqs = gg.map(g => {
+    val haplSeqs = gg.flatMap(g => {
       val fn = (g.freq * n).asInstanceOf[Int]
       val cleanedSeq = trim(clean(g.toIntegralString), 'N')
       (0 until fn).map(x => {
@@ -50,7 +50,7 @@ object OutputHandler {
         i += 1
         dna
       })
-    }).flatten
+    })
     writeFasta(out, haplSeqs)
   }
 
@@ -144,12 +144,12 @@ object OutputHandler {
     r2 ++ r1
   }
 
-  def mean[T <% Double](vals: Iterable[T]) = {
+  def mean[T](vals: Iterable[T])(implicit ev1: T => Double) = {
     val N = vals.size
     vals.map(_.toDouble).sum / N
   }
 
-  def sigma[T <% Double](vals: Iterable[T]) = {
+  def sigma[T](vals: Iterable[T])(implicit ev1: T => Double) = {
     val meanValue = mean(vals)
     Math.sqrt(mean(vals.map(x => Math.pow(x - meanValue, 2))))
   }

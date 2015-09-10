@@ -26,8 +26,8 @@ import scala.collection.parallel.TaskSupport
  */
 package object exec {
   val USER_DIR = "user.dir"
-  val NAME = "kGEM"
-  val KGEM_STR = "kGEM v.%s: Local Reconstruction for Mixed Viral Populations."
+  val NAME = "2SNV"
+  val TWOSNV_STR = "2SNV v.%s: Local Reconstruction for Mixed Viral Populations."
   var numproc: TaskSupport = null
 
   //private values and variables
@@ -47,7 +47,7 @@ package object exec {
 
   //Public methods
   /**
-   * Method to perform KGEM. When call
+   * Method to perform 2SNV. When call
    * from another program as library
    * all parameters are mandatory
    * @param reads
@@ -66,7 +66,7 @@ package object exec {
    * @return
    * Set of genotypes corresponding to a given set of reads
    */
-  def executeKgem(reads: List[DNASequence] = seqs, k: Int = k, numproc: TaskSupport = config.numproc, threshold: Int = threshold,
+  def execute2Snv(reads: List[DNASequence] = seqs, k: Int = k, numproc: TaskSupport = config.numproc, threshold: Int = threshold,
                   eps: Double = config.epsilon, pr_threshold: Double = config.prThr,
                   seeds: Iterable[Genotype] = seeds): List[Genotype] = {
     if (numproc != null ) {
@@ -136,7 +136,7 @@ package object exec {
       outputResult(out, gens, n, str_modifier)
     else
       outputHaplotypes(out, gens, str_modifier)
-    log("The whole procedure took %.2f minutes".format((System.currentTimeMillis - s) * 0.0001 / 6))
+    log("The whole procedure took %.2f minutes".format((System.currentTimeMillis - s) * 1E-4 / 6))
     log("Total number of haplotypes is %d".format(gens.size))
     log("bye bye")
   }
@@ -157,7 +157,7 @@ package object exec {
     val l = extSAMRecords.map(s => s.length).max
     extSAMRecords = samRecords.map(s => SAMParser.toExtendedString(s, l))
     val samMap = samRecords.map(s => (SAMParser.toExtendedString(s, l), s)).toMap
-    val readsMap = flip(samMap.map(s => (s._2.getReadName, s._1)).toMap)
+    val readsMap = flip(samMap.map(s => (s._2.getReadName, s._1)))
     val reads = toReads(samMap)
     initReadFreqs(reads, readsMap)
     reads
@@ -287,8 +287,9 @@ package object exec {
    * @return
    * Map[ Y, Set[X] ]
    */
-  def flip[X, Y](m: Map[X, Y]): Map[Y, Set[X]] =
-    m.groupBy(_._2).mapValues(_.map(_._1).toSet)
+  def flip[X, Y](m: Map[X, Y]): Map[Y, Set[X]] = {
+    m.groupBy(_._2).mapValues(_.keySet)
+  }
 
   def log(mes: String) = {
     val date = new Date()
@@ -323,7 +324,7 @@ package object exec {
 
   protected[exec] def printGreetings() = {
     log(LINE)
-    log(KGEM_STR.format(Main.getClass.getPackage.getImplementationVersion))
+    log(TWOSNV_STR.format(Main.getClass.getPackage.getImplementationVersion))
     log(LINE)
   }
 }

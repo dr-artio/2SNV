@@ -46,7 +46,7 @@ object KGEM {
     var genMap = new mutable.HashMap[Genotype, Int]()
     do {
       collapsed = collapse.size
-      runKgem(collapse)
+      run2Snv(collapse)
       val col = collapse.map(g => (g.toIntegralString, g)).toMap
       collapse = col.values.toList
       collapse = thresholdClean(collapse, tr)
@@ -73,7 +73,7 @@ object KGEM {
     cleaned
   }
 
-  private def runKgem(gens: Iterable[Genotype]) = {
+  private def run2Snv(gens: Iterable[Genotype]) = {
     for (g <- gens) g.convergen = false
     var i = 1
     while (!gens.forall(g => g.convergen)) {

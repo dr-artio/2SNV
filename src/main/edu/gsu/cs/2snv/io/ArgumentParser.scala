@@ -2,7 +2,7 @@ package edu.gsu.cs.kgem.io
 
 import java.io.File
 import scopt.OptionParser
-import edu.gsu.cs.kgem.exec.{KGEM_STR, Main}
+import edu.gsu.cs.kgem.exec.{TWOSNV_STR, Main}
 import scala.collection.parallel.{ForkJoinTaskSupport, TaskSupport}
 import scala.concurrent.forkjoin.ForkJoinPool
 
@@ -16,7 +16,7 @@ object ArgumentParser {
 
   def parseArguments(args: Array[String]): Option[Config] = {
     val parser = new OptionParser[Config]("kGEM") {
-      head(KGEM_STR.format(Main.getClass.getPackage.getImplementationVersion))
+      head(TWOSNV_STR.format(Main.getClass.getPackage.getImplementationVersion))
       arg[File]("ReadsFile") action {
         (x, c) => c.copy(readsFile = x)
       } text "Fasta (*.fa, *.fas, *.fasta) file containing aligned sequence data."

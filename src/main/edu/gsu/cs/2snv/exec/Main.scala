@@ -37,8 +37,8 @@ object Main {
     printGreetings()
     log("Reading input...")
     initInputData()
-    log("KGEM started...")
-    val gens = executeKgem()
+    log("2SNV started...")
+    val gens = execute2Snv()
     log("Output results...")
     outputResults(gens, s)
   }
